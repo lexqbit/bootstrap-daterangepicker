@@ -9,6 +9,8 @@
 !function ($) {
 
     var DateRangePicker = function (element, options, cb) {
+        options = $.extend(true, {}, options, this.getMarkupSettings(element))
+
         var hasOptions = typeof options == 'object';
         var localeObject;
 
@@ -708,6 +710,33 @@
 
             return html;
 
+        },
+
+        getMarkupSettings: function (el) {
+            function boolAttr(name) {
+                var value = el.attr(name);
+                return (value === undefined) ? value : $.trim(value).toLowerCase() === "true";
+            }
+
+            var settings = {
+                opens: el.attr('data-opens'),
+                format: el.attr('data-format'),
+                startDate: el.attr('data-startDate'),
+                endDate: el.attr('data-endDate'),
+                minDate: el.attr('data-minDate'),
+                maxDate: el.attr('data-maxDate'),
+                separator: el.attr('data-separator'),
+                showDropdowns: boolAttr('data-showDropdowns')
+            };
+
+            // Remove undefined values from settings
+            for (i in settings) {
+                if (settings[i] === undefined) {
+                    delete settings[i];
+                }
+            }
+
+            return settings;
         }
 
     };
